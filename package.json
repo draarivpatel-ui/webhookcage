@@ -41,10 +41,13 @@
     "check:types": "node scripts/check-types.mjs",
     "smoke:cli": "node scripts/cli-smoke.mjs",
     "check:pack": "node scripts/check-pack.mjs",
-    "verify": "npm test && node scripts/build-cjs.mjs --check && node scripts/check-types.mjs && node scripts/cli-smoke.mjs && node scripts/check-pack.mjs"
+    "verify": "npm test && node scripts/build-cjs.mjs --check && node scripts/check-types.mjs && node scripts/cli-smoke.mjs && node scripts/check-pack.mjs",
+    "test:fuzz": "node --test test/fuzz.test.js"
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "fast-check": "4.10.3"
+  },
   "keywords": [
     "webhook",
     "webhooks",

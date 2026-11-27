@@ -9,7 +9,7 @@ const errors = [];
 if (packageJson.name !== 'webhookcage') errors.push('package name is not webhookcage');
 if (packageJson.version !== '1.0.0') errors.push('package version is not 1.0.0');
 if (Object.keys(packageJson.dependencies || {}).length !== 0) errors.push('runtime dependencies are not empty');
-if (Object.keys(packageJson.devDependencies || {}).length !== 0) errors.push('devDependencies are not empty');
+if ((packageJson.devDependencies || {})['fast-check'] !== '4.10.3' || Object.keys(packageJson.devDependencies || {}).length !== 1) errors.push('devDependencies are not limited to pinned fast-check');
 if (!packageJson.exports || packageJson.exports['.'].import !== './src/index.mjs') errors.push('ESM export is incorrect');
 if (!packageJson.exports || packageJson.exports['.'].require !== './cjs/index.cjs') errors.push('CJS export is incorrect');
 if (!packageJson.exports || packageJson.exports['.'].types !== './types/index.d.ts') errors.push('types export is incorrect');

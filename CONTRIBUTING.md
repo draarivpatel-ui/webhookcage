@@ -2,7 +2,7 @@
 
 ## Ground rules
 
-- Keep runtime and development dependencies empty.
+- Keep runtime dependencies empty. `fast-check` is the only development dependency and is used only for property-based fuzz tests.
 - Keep support for Node.js 18 and newer.
 - Add deterministic offline tests for every security behavior.
 - Do not weaken an existing rejection to make a new feature pass.

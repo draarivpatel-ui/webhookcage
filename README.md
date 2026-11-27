@@ -6,8 +6,9 @@ comparison, enforces timestamp replay windows and clock-skew limits, supports
 zero-downtime key rotation, records replayed deliveries, and validates outbound
 webhook delivery URLs against SSRF and cloud metadata attacks.
 
-The package has no runtime dependencies and no development dependencies. It
-ships native ESM, generated CommonJS, and TypeScript declarations.
+The package has no runtime dependencies. `fast-check` is a development-only
+fuzzing dependency. It ships native ESM, generated CommonJS, and TypeScript
+declarations.
 
 ## Inbound verification
 

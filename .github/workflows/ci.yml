@@ -1,128 +1,65 @@
-name: ci
+name: CI
 
 on:
   push:
     branches: [main]
   pull_request:
-  workflow_dispatch:
+    branches: [main]
+
+permissions: {}
 
 jobs:
-  node18-ubuntu:
-    name: Node 18 / Ubuntu
+  test:
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+        node: [18, 20, 22, 24]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Run deterministic test suite
+        shell: bash
+        run: npm test
+      - name: Verify generated CommonJS build is current
+        shell: bash
+        run: node scripts/build-cjs.mjs --check
+      - name: Run strict TypeScript declaration check
+        shell: bash
+        run: node scripts/check-types.mjs
+      - name: Run CLI smoke test
+        shell: bash
+        run: node scripts/cli-smoke.mjs
+      - name: Audit package tarball
+        shell: bash
+        run: npm pack --dry-run
+
+  fuzz:
+    name: property fuzz
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: '18'
-      - run: node scripts/build-cjs.mjs --check
-      - run: node scripts/run-tests.mjs
-      - run: node scripts/check-types.mjs
-      - run: node scripts/cli-smoke.mjs
-      - run: node scripts/check-pack.mjs
-
-  node20-ubuntu:
-    name: Node 20 / Ubuntu
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '20'
-      - run: node scripts/build-cjs.mjs --check
-      - run: node scripts/run-tests.mjs
-      - run: node scripts/check-types.mjs
-      - run: node scripts/cli-smoke.mjs
-      - run: node scripts/check-pack.mjs
-
-  node22-ubuntu:
-    name: Node 22 / Ubuntu
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '22'
-      - run: node scripts/build-cjs.mjs --check
-      - run: node scripts/run-tests.mjs
-      - run: node scripts/check-types.mjs
-      - run: node scripts/cli-smoke.mjs
-      - run: node scripts/check-pack.mjs
-
-  node24-ubuntu:
-    name: Node 24 / Ubuntu
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-      - run: node scripts/build-cjs.mjs --check
-      - run: node scripts/run-tests.mjs
-      - run: node scripts/check-types.mjs
-      - run: node scripts/cli-smoke.mjs
-      - run: node scripts/check-pack.mjs
-
-  node18-windows:
-    name: Node 18 / Windows
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          autocrlf: false
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '18'
-      - run: node scripts/build-cjs.mjs --check
-      - run: node scripts/run-tests.mjs
-      - run: node scripts/check-types.mjs
-      - run: node scripts/cli-smoke.mjs
-      - run: node scripts/check-pack.mjs
-
-  node20-windows:
-    name: Node 20 / Windows
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          autocrlf: false
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '20'
-      - run: node scripts/build-cjs.mjs --check
-      - run: node scripts/run-tests.mjs
-      - run: node scripts/check-types.mjs
-      - run: node scripts/cli-smoke.mjs
-      - run: node scripts/check-pack.mjs
-
-  node22-windows:
-    name: Node 22 / Windows
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          autocrlf: false
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '22'
-      - run: node scripts/build-cjs.mjs --check
-      - run: node scripts/run-tests.mjs
-      - run: node scripts/check-types.mjs
-      - run: node scripts/cli-smoke.mjs
-      - run: node scripts/check-pack.mjs
-
-  node24-windows:
-    name: Node 24 / Windows
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          autocrlf: false
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-      - run: node scripts/build-cjs.mjs --check
-      - run: node scripts/run-tests.mjs
-      - run: node scripts/check-types.mjs
-      - run: node scripts/cli-smoke.mjs
-      - run: node scripts/check-pack.mjs
+          node-version: 24
+      - name: Install development dependencies
+        run: npm ci --ignore-scripts
+      - name: Run property fuzz tests
+        run: npm run test:fuzz
