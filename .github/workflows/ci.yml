@@ -1,0 +1,128 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  node18-ubuntu:
+    name: Node 18 / Ubuntu
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '18'
+      - run: node scripts/build-cjs.mjs --check
+      - run: node scripts/run-tests.mjs
+      - run: node scripts/check-types.mjs
+      - run: node scripts/cli-smoke.mjs
+      - run: node scripts/check-pack.mjs
+
+  node20-ubuntu:
+    name: Node 20 / Ubuntu
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+      - run: node scripts/build-cjs.mjs --check
+      - run: node scripts/run-tests.mjs
+      - run: node scripts/check-types.mjs
+      - run: node scripts/cli-smoke.mjs
+      - run: node scripts/check-pack.mjs
+
+  node22-ubuntu:
+    name: Node 22 / Ubuntu
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: node scripts/build-cjs.mjs --check
+      - run: node scripts/run-tests.mjs
+      - run: node scripts/check-types.mjs
+      - run: node scripts/cli-smoke.mjs
+      - run: node scripts/check-pack.mjs
+
+  node24-ubuntu:
+    name: Node 24 / Ubuntu
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: node scripts/build-cjs.mjs --check
+      - run: node scripts/run-tests.mjs
+      - run: node scripts/check-types.mjs
+      - run: node scripts/cli-smoke.mjs
+      - run: node scripts/check-pack.mjs
+
+  node18-windows:
+    name: Node 18 / Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          autocrlf: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '18'
+      - run: node scripts/build-cjs.mjs --check
+      - run: node scripts/run-tests.mjs
+      - run: node scripts/check-types.mjs
+      - run: node scripts/cli-smoke.mjs
+      - run: node scripts/check-pack.mjs
+
+  node20-windows:
+    name: Node 20 / Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          autocrlf: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+      - run: node scripts/build-cjs.mjs --check
+      - run: node scripts/run-tests.mjs
+      - run: node scripts/check-types.mjs
+      - run: node scripts/cli-smoke.mjs
+      - run: node scripts/check-pack.mjs
+
+  node22-windows:
+    name: Node 22 / Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          autocrlf: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: node scripts/build-cjs.mjs --check
+      - run: node scripts/run-tests.mjs
+      - run: node scripts/check-types.mjs
+      - run: node scripts/cli-smoke.mjs
+      - run: node scripts/check-pack.mjs
+
+  node24-windows:
+    name: Node 24 / Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          autocrlf: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: node scripts/build-cjs.mjs --check
+      - run: node scripts/run-tests.mjs
+      - run: node scripts/check-types.mjs
+      - run: node scripts/cli-smoke.mjs
+      - run: node scripts/check-pack.mjs

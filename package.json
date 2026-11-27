@@ -1,0 +1,74 @@
+{
+  "name": "webhookcage",
+  "version": "1.0.0",
+  "description": "Zero-dependency inbound webhook HMAC verification, replay protection, key rotation, and outbound SSRF delivery firewall",
+  "type": "module",
+  "license": "MIT",
+  "main": "./cjs/index.cjs",
+  "module": "./src/index.mjs",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./src/index.mjs",
+      "require": "./cjs/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "webhookcage": "./bin/webhookcage.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "cjs/",
+    "types/",
+    "examples/",
+    "README.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "GOOD_FIRST_ISSUES.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "node scripts/build-cjs.mjs",
+    "test": "node scripts/run-tests.mjs tests/*.test.mjs",
+    "test:all": "node scripts/build-cjs.mjs && node scripts/run-tests.mjs tests/*.test.mjs",
+    "check:types": "node scripts/check-types.mjs",
+    "smoke:cli": "node scripts/cli-smoke.mjs",
+    "check:pack": "node scripts/check-pack.mjs",
+    "verify": "npm test && node scripts/build-cjs.mjs --check && node scripts/check-types.mjs && node scripts/cli-smoke.mjs && node scripts/check-pack.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "webhook",
+    "webhooks",
+    "hmac",
+    "signature",
+    "replay-protection",
+    "key-rotation",
+    "ssrf",
+    "security",
+    "github",
+    "stripe",
+    "slack",
+    "standard-webhooks",
+    "zero-dependency"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/draarivpatel-ui/webhookcage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/draarivpatel-ui/webhookcage/issues"
+  },
+  "homepage": "https://github.com/draarivpatel-ui/webhookcage#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}
